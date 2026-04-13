@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MediConnectApplication {
     public static void main(String[] args) {
         SpringApplication.run(MediConnectApplication.class, args);
-        System.out.println("Welcome to MediConnect Progressive Project!");
+        System.out.println("Hello MediConnect Progressive Project");
     }
 }

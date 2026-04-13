@@ -1,24 +1,25 @@
 package com.edutech.progressive.controller;
 
-import com.edutech.progressive.entity.Clinic;
 import org.springframework.http.ResponseEntity;
+
+import com.edutech.progressive.dao.PatientDAOImpl;
 
 import java.util.List;
 
 public class ClinicController {
-    public ResponseEntity<List<Clinic>> getAllClinics() {
+    public ResponseEntity<List<PatientDAOImpl>> getAllClinics() {
         return null;
     }
 
-    public ResponseEntity<Clinic> getClinicById(int clinicId) {
+    public ResponseEntity<PatientDAOImpl> getClinicById(int clinicId) {
         return null;
     }
 
-    public ResponseEntity<Integer> addClinic(Clinic clinic) {
+    public ResponseEntity<Integer> addClinic(PatientDAOImpl clinic) {
         return null;
     }
 
-    public ResponseEntity<Void> updateClinic(int clinicId, Clinic clinic) {
+    public ResponseEntity<Void> updateClinic(int clinicId, PatientDAOImpl clinic) {
         return null;
     }
 
@@ -26,11 +27,11 @@ public class ClinicController {
         return null;
     }
 
-    public ResponseEntity<List<Clinic>> getAllClinicByLocation(String location) {
+    public ResponseEntity<List<PatientDAOImpl>> getAllClinicByLocation(String location) {
         return null;
     }
 
-    public ResponseEntity<List<Clinic>> getAllClinicByDoctorId(int doctorId) {
+    public ResponseEntity<List<PatientDAOImpl>> getAllClinicByDoctorId(int doctorId) {
         return null;
     }
 }

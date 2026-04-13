@@ -7,6 +7,6 @@ public class DoctorDTO {
     private String fullName;
     private String contactNumber;
     private String email;
-    private String specialty;
+    private String speciality;
     private Integer yearsOfExperience;
 }
