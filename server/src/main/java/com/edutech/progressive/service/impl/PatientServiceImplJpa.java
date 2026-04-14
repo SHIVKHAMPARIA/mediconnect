@@ -1,53 +1,65 @@
 package com.edutech.progressive.service.impl;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.edutech.progressive.entity.Patient;
 import com.edutech.progressive.repository.PatientRepository;
 import com.edutech.progressive.service.PatientService;
+
 @Service
-@Primary
 public class PatientServiceImplJpa implements PatientService {
 
+    private PatientRepository patientRepository;
+
     @Autowired
-    private final PatientRepository pr;
-    public PatientServiceImplJpa(PatientRepository pr){
-        this.pr = pr;
-    }
-    @Override
-    public List<Patient> getAllPatients() throws SQLException {
-        return pr.findAll();
-    }
-    @Override
-    public Integer addPatient(Patient patient) throws SQLException {
-        Patient p = pr.save(patient);
-        return p.getPatientId();
-    }
-    @Override
-    public List<Patient> getAllPatientSortedByName() throws SQLException {
-        return pr.findAllPatientSortedByName();
+    public PatientServiceImplJpa(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
     }
 
-    public void updatePatient(Patient patient) {
-        pr.save(patient);
+    @Override
+    public List<Patient> getAllPatients() throws Exception {
+        return patientRepository.findAll();
     }
 
-    public void deletePatient(int patientId) {
-        if(pr.findById(patientId).isPresent()){
-            pr.deleteById(patientId);
+    @Override
+    public Integer addPatient(Patient patient) throws Exception {
+        return patientRepository.save(patient).getPatientId();
+    }
+
+    @Override
+    public List<Patient> getAllPatientSortedByName() throws Exception {
+        List<Patient> patientList = patientRepository.findAll();
+        patientList.sort(Comparator.comparing(Patient::getFullName));
+        return patientList;
+    }
+
+    public void updatePatient(Patient patient) throws Exception {
+        Patient patientObj = patientRepository.findById(patient.getPatientId()).get();
+        if (patientObj != null) {
+            patientObj.setFullName(patient.getFullName());
+            patientObj.setContactNumber(patient.getContactNumber());
+            patientObj.setDateOfBirth(patient.getDateOfBirth());
+            patientObj.setEmail(patient.getEmail());
+            patientObj.setAddress(patient.getEmail());
+
+            patientRepository.save(patientObj);
         }
     }
 
-    public Patient getPatientById(int patientId) {
-        if(pr.findById(patientId).isPresent()){
-            return pr.findById(patientId).get();
-        }
-        return null;
+    public void deletePatient(int patientId) throws Exception {
+        // if(patientRepository.existsById(patientId)){
+            patientRepository.deleteById(patientId);
+        // }
+    }
+
+    public Patient getPatientById(int patientId) throws Exception {
+        return patientRepository.findByPatientId(patientId);
     }
 
 }

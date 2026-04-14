@@ -4,10 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.hibernate.annotations.GeneratorType;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "doctor")
 public class Doctor implements Comparable<Doctor> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,9 +64,15 @@ public class Doctor implements Comparable<Doctor> {
     public void setYearsOfExperience(int yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
     }
+    
     @Override
     public int compareTo(Doctor o) {
-        return Integer.compare(this.yearsOfExperience, o.getYearsOfExperience());
+        return Integer.compare(this.yearsOfExperience, o.yearsOfExperience);
     }
-    
+    @Override
+    public String toString() {
+        return "Doctor [doctorId=" + doctorId + ", fullName=" + fullName + ", specialty=" + specialty
+                + ", contactNumber=" + contactNumber + ", email=" + email + ", yearsOfExperience=" + yearsOfExperience
+                + "]";
+    }
 }
