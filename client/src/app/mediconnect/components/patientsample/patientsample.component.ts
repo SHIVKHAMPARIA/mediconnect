@@ -9,6 +9,7 @@ import { Patient } from 'src/app/mediconnect/models/Patient';
     styleUrls: ['./patientsample.component.scss'],
     imports: [CommonModule]
 })
+
 export class PatientSampleComponent {
     patient: Patient = new Patient(
         1,
