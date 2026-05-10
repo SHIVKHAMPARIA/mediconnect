@@ -38,7 +38,7 @@
                           [class.selected]="clinic.clinicId === selectedClinicId">
                           <td>{{ clinic.clinicId }}</td>
                           <td>{{ clinic.clinicName }}</td>
-                          <td>{{ clinic.doctor?.fullName }}</td>
+                          <td>{{ clinic.doctor.fullName }}</td>
                           <td>{{ clinic.location }}</td>
                           <td class="actions-cell">
                               <button (click)="navigateToEditClinic(clinic.clinicId)" class="btn-primary">Edit</button>

@@ -33,7 +33,7 @@ public class Clinic {
     private int establishedYear;
 
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 

@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
     templateUrl: './logout.component.html',
     styleUrls: ['./logout.component.scss']
 })
+
 export class LogoutComponent{
     role!: string | null;
     doctorId!: number;
@@ -22,5 +23,5 @@ export class LogoutComponent{
         this.authService.logout();
         this.router.navigate(["/auth"]);
     }
-
+    
 }

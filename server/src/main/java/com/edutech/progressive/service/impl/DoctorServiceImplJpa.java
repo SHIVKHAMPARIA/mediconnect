@@ -1,9 +1,7 @@
 package com.edutech.progressive.service.impl;
 
-
 import java.util.Comparator;
 import java.util.List;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +18,6 @@ import com.edutech.progressive.repository.AppointmentRepository;
 import com.edutech.progressive.repository.UserRepository;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 
 @Service
 public class DoctorServiceImplJpa implements DoctorService {
@@ -75,8 +72,7 @@ public class DoctorServiceImplJpa implements DoctorService {
         User user = userRepository.findByUsername(doctorDTO.getUsername());
         if (user != null && user.getDoctor().getDoctorId() != doctorDTO.getDoctorId()) {
             throw new DoctorAlreadyExistsException("User with username " + doctorDTO.getEmail() + " already exists");
-        }
-        else {
+        } else {
             doctorUser.setUsername(doctorDTO.getUsername());
         }
         if (!doctorUser.getPassword().equals(doctorDTO.getPassword())) {
@@ -95,22 +91,19 @@ public class DoctorServiceImplJpa implements DoctorService {
 
     // @Override
     // public void deleteDoctor(int doctorId) throws Exception {
-    //     appointmentRepository.deleteByDoctorId(doctorId);
-    //     clinicRepository.deleteByDoctorId(doctorId);
-    //     userRepository.deleteByDoctorId(doctorId);
-    //     doctorRepository.deleteById(doctorId);
+    // appointmentRepository.deleteByDoctorId(doctorId);
+    // clinicRepository.deleteByDoctorId(doctorId);
+    // userRepository.deleteByDoctorId(doctorId);
+    // doctorRepository.deleteById(doctorId);
     // }
-
 
     @Override
     public void deleteDoctor(int doctorId) throws Exception {
-        appointmentRepository.deleteByDoctorId(doctorId);
-        clinicRepository.deleteByDoctorId(doctorId);
-        User linkedUser = userRepository.findByDoctorId(doctorId);
-        if (linkedUser != null) {
-            userRepository.deleteById(linkedUser.getUserId());
-        }
-        doctorRepository.deleteById(doctorId);
+
+        Doctor doctor = doctorRepository.findById(doctorId)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
+        doctorRepository.delete(doctor);
     }
 
     @Override
