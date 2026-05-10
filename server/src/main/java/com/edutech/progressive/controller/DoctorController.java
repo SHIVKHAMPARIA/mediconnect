@@ -1,9 +1,8 @@
 package com.edutech.progressive.controller;
 
+import com.edutech.progressive.dto.DoctorDTO;
 import com.edutech.progressive.entity.Doctor;
-import com.edutech.progressive.exception.DoctorAlreadyExistsException;
 import com.edutech.progressive.service.impl.DoctorServiceImplJpa;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,69 +22,74 @@ import java.util.List;
 public class DoctorController {
 
     @Autowired
-    private DoctorServiceImplJpa doctorServiceImplJpa;
+    DoctorServiceImplJpa doctorServiceImplJpa;
 
     @GetMapping
     public ResponseEntity<List<Doctor>> getAllDoctors() {
         try {
-            return new ResponseEntity<List<Doctor>>(doctorServiceImplJpa.getAllDoctors(), HttpStatus.OK);
+            List<Doctor> doctorList = doctorServiceImplJpa.getAllDoctors();
+            return new ResponseEntity<>(doctorList, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/{doctorId}")
-    public ResponseEntity<Doctor> getDoctorById(@PathVariable int doctorId) {
+    public ResponseEntity<?> getDoctorById(@PathVariable int doctorId) {
         try {
-            return new ResponseEntity<Doctor>(doctorServiceImplJpa.getDoctorById(doctorId), HttpStatus.OK);
+            Doctor doctor = doctorServiceImplJpa.getDoctorById(doctorId);
+            return new ResponseEntity<>(doctor, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping
-    public ResponseEntity<Integer> addDoctor(@RequestBody Doctor doctor) {
+    public ResponseEntity<?> addDoctor(@RequestBody Doctor doctor) {
         try {
-            return new ResponseEntity<Integer>(doctorServiceImplJpa.addDoctor(doctor), HttpStatus.CREATED);
-        } 
-        catch(DoctorAlreadyExistsException e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            int doctorId = doctorServiceImplJpa.addDoctor(doctor);
+            return new ResponseEntity<>(doctorId, HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("/{doctorId}")
-    public ResponseEntity<Void> updateDoctor(@PathVariable int doctorId,@RequestBody Doctor doctor) {
+    public ResponseEntity<?> updateDoctor(@PathVariable int doctorId, @RequestBody DoctorDTO doctor) {
         try {
             doctor.setDoctorId(doctorId);
-            doctorServiceImplJpa.updateDoctor(doctor);
-            return new ResponseEntity<Void>(HttpStatus.OK);
-        }
-        catch(DoctorAlreadyExistsException e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            doctorServiceImplJpa.modifyDoctorDetails(doctor);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/{doctorId}")
-    public ResponseEntity<Void> deleteDoctor(@PathVariable int doctorId) {
+    public ResponseEntity<?> deleteDoctor(@PathVariable int doctorId) {
         try {
             doctorServiceImplJpa.deleteDoctor(doctorId);
-            return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseEntity<List<Doctor>> getDoctorSortedByExperience() {
+    @GetMapping("/experience")
+    public ResponseEntity<?> getDoctorSortedByExperience() {
         try {
-            return new ResponseEntity<List<Doctor>>(doctorServiceImplJpa.getDoctorSortedByExperience(), HttpStatus.NO_CONTENT);
+            List<Doctor> doctorList = doctorServiceImplJpa.getDoctorSortedByExperience();
+            return new ResponseEntity<>(doctorList, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

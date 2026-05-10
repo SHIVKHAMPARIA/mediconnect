@@ -1,14 +1,13 @@
+
 package com.edutech.progressive.repository;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import com.edutech.progressive.entity.Clinic;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.edutech.progressive.entity.Clinic;
+import java.util.List;
+
 @Repository
 public interface ClinicRepository extends JpaRepository<Clinic, Integer> {
 
@@ -21,9 +20,10 @@ public interface ClinicRepository extends JpaRepository<Clinic, Integer> {
     @Query("SELECT c FROM Clinic c WHERE c.doctor.doctorId = :doctorId")
     List<Clinic> findAllByDoctorId(int doctorId);
 
-    @Transactional
     @Modifying
-    @Query ("DELETE FROM Clinic c WHERE c.doctor.doctorId = :doctorId")
+    @Transactional
+    @Query("DELETE FROM Clinic c WHERE c.doctor.doctorId = :doctorId")
     void deleteByDoctorId(int doctorId);
+
 
 }

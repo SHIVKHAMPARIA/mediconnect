@@ -1,51 +1,39 @@
 package com.edutech.progressive.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 @Entity
+@Table(name = "appointment")
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int appointmentId;
+    private Integer appointmentId;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "clinic_id")
+    @JoinColumn(name = "clinic_id", nullable = false)
     private Clinic clinic;
-    
+
+    @Column(name = "appointment_date", nullable = false)
     private Date appointmentDate;
-    private String status;
+
+    @Column(name = "status", nullable = false)
+    private String status; 
+
+    @Column(name = "purpose")
     private String purpose;
 
-    public Appointment() {
-    }
 
-    public Appointment(int appointmentId, Patient patient, Clinic clinic, Date appointmentDate, String status,
-            String purpose) {
-        this.appointmentId = appointmentId;
-        this.patient = patient;
-        this.clinic = clinic;
-        this.appointmentDate = appointmentDate;
-        this.status = status;
-        this.purpose = purpose;
-    }
-
-    public int getAppointmentId() {
+    public Integer getAppointmentId() {
         return appointmentId;
     }
 
-    public void setAppointmentId(int appointmentId) {
+    public void setAppointmentId(Integer appointmentId) {
         this.appointmentId = appointmentId;
     }
 
@@ -88,5 +76,4 @@ public class Appointment {
     public void setPurpose(String purpose) {
         this.purpose = purpose;
     }
-
 }

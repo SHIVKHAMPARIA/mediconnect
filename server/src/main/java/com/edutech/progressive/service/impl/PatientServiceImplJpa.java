@@ -1,8 +1,5 @@
 package com.edutech.progressive.service.impl;
 
-// import java.util.ArrayList;
-// import java.util.Optional;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +12,32 @@ import com.edutech.progressive.repository.BillingRepository;
 import com.edutech.progressive.repository.PatientRepository;
 import com.edutech.progressive.service.PatientService;
 
+import com.edutech.progressive.dto.PatientDTO;
+import com.edutech.progressive.entity.User;
+import com.edutech.progressive.exception.DoctorAlreadyExistsException;
+
+import com.edutech.progressive.repository.AppointmentRepository;
+import com.edutech.progressive.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Comparator;
+
 @Service
 public class PatientServiceImplJpa implements PatientService {
 
-    private PatientRepository patientRepository;
+    PatientRepository patientRepository;
+
+    @Autowired
+    AppointmentRepository appointmentRepository;
 
     @Autowired
     private BillingRepository billingRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     public PatientServiceImplJpa(PatientRepository patientRepository) {
@@ -37,7 +53,7 @@ public class PatientServiceImplJpa implements PatientService {
     public Integer addPatient(Patient patient) throws Exception {
         Patient existingPatient = patientRepository.findByEmail(patient.getEmail());
         if (existingPatient != null) {
-            throw new PatientAlreadyExistsException("Patient already exists");
+            throw new PatientAlreadyExistsException("Patient with email " + patient.getEmail() + " already exists");
         }
         return patientRepository.save(patient).getPatientId();
     }
@@ -49,33 +65,48 @@ public class PatientServiceImplJpa implements PatientService {
         return patientList;
     }
 
-    public void updatePatient(Patient patient) throws Exception {
-        Patient existingPatient = patientRepository.findByEmail(patient.getEmail());
-        if (existingPatient != null) {
-            throw new PatientAlreadyExistsException("Patient already exists");
+    @Override
+    public void modifyPatientDetails(PatientDTO patientDTO) {
+        Patient existingPatient = patientRepository.findByEmail(patientDTO.getEmail());
+        User patientUser = userRepository.findByPatientId(patientDTO.getPatientId());
+        if (existingPatient != null && existingPatient.getPatientId() != patientDTO.getPatientId()) {
+            throw new PatientAlreadyExistsException("Patient with email " + patientDTO.getEmail() + " already exists");
         }
-        Patient patientObj = patientRepository.findById(patient.getPatientId()).get();
-        if (patientObj != null) {
-            patientObj.setFullName(patient.getFullName());
-            patientObj.setContactNumber(patient.getContactNumber());
-            patientObj.setDateOfBirth(patient.getDateOfBirth());
-            patientObj.setEmail(patient.getEmail());
-            patientObj.setAddress(patient.getEmail());
-
-            patientRepository.save(patientObj);
+        User user = userRepository.findByUsername(patientDTO.getUsername());
+        if (user != null && user.getPatient().getPatientId() != patientDTO.getPatientId()) {
+            throw new DoctorAlreadyExistsException("User with username " + patientDTO.getEmail() + " already exists");
         }
+        else {
+            patientUser.setUsername(patientDTO.getUsername());
+        }
+        if (!patientUser.getPassword().equals(patientDTO.getPassword())) {
+            patientUser.setPassword(passwordEncoder.encode(patientDTO.getPassword()));
+        }
+        userRepository.save(patientUser);
+        Patient patientEntity = new Patient();
+        patientEntity.setPatientId(patientDTO.getPatientId());
+        patientEntity.setFullName(patientDTO.getFullName());
+        patientEntity.setDateOfBirth(patientDTO.getDateOfBirth());
+        patientEntity.setEmail(patientDTO.getEmail());
+        patientEntity.setContactNumber(patientDTO.getContactNumber());
+        patientEntity.setAddress(patientDTO.getAddress());
+        patientRepository.save(patientEntity);
     }
 
+    @Override
     public void deletePatient(int patientId) throws Exception {
+        if (!patientRepository.existsById(patientId)) {
+            throw new PatientNotFoundException("Patient with ID " + patientId + " not found for deletion");
+        }
+        appointmentRepository.deleteByPatientId(patientId);
         billingRepository.deleteByPatientId(patientId);
+        userRepository.deleteByPatientId(patientId);
         patientRepository.deleteById(patientId);
     }
 
+    @Override
     public Patient getPatientById(int patientId) throws Exception {
-        if (!patientRepository.existsById(patientId)) {
-            throw new PatientNotFoundException("Patient not found");
-        }
-        return patientRepository.findByPatientId(patientId);
+        return patientRepository.findById(patientId)
+                .orElseThrow(() -> new PatientNotFoundException("Patient with ID " + patientId + " not found"));
     }
-
 }

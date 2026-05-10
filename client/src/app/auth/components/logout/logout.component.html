@@ -1,3 +1,9 @@
-<button type="button" class="btn btn-outline-light btn-sm" (click)="logout()">
-  Logout
-</button>
+<div class="logout-container">
+  <span class="logout-greeting">
+    Hello, <strong>{{ userName || 'User' }}</strong>
+  </span>
+
+  <span class="logout-divider"></span> 
+  
+  <button (click)="logout()" class="logout-button">Logout</button>
+</div>

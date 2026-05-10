@@ -1,90 +1,78 @@
 package com.edutech.progressive.entity;
 
+import javax.persistence.*;
 import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 public class Billing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int billingId;
+    private Integer billingId;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id")
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    private double amount;
-    // @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Double amount;
 
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date dateOfIssue;
-    // @Temporal(TemporalType.DATE)
+
+    @Temporal(TemporalType.DATE)
     private Date dueDate;
+
+    @Column(nullable = false)
     private String status;
 
-    public Billing() {
-    }
-
-    public Billing(Patient patient, double amount, Date dateOfIssue, Date dueDate, String status) {
-        this.patient = patient;
-        this.amount = amount;
-        this.dateOfIssue = dateOfIssue;
-        this.dueDate = dueDate;
-        this.status = status;
-    }
-    
-    public Billing(int billingId, Patient patient, double amount, Date dateOfIssue, Date dueDate, String status) {
-        this.billingId = billingId;
-        this.patient = patient;
-        this.amount = amount;
-        this.dateOfIssue = dateOfIssue;
-        this.dueDate = dueDate;
-        this.status = status;
-    }
-    public int getBillingId() {
+    // Getters and Setters
+    public Integer getBillingId() {
         return billingId;
     }
-    public void setBillingId(int billingId) {
+
+    public void setBillingId(Integer billingId) {
         this.billingId = billingId;
     }
+
     public Patient getPatient() {
         return patient;
     }
+
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
-    public double getAmount() {
+
+    public Double getAmount() {
         return amount;
     }
-    public void setAmount(double amount) {
+
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
+
     public Date getDateOfIssue() {
         return dateOfIssue;
     }
+
     public void setDateOfIssue(Date dateOfIssue) {
         this.dateOfIssue = dateOfIssue;
     }
+
     public Date getDueDate() {
         return dueDate;
     }
+
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
+
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
-
-    
-
 }

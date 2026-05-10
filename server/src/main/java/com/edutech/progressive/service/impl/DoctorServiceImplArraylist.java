@@ -1,20 +1,19 @@
 package com.edutech.progressive.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 
 import com.edutech.progressive.entity.Doctor;
 import com.edutech.progressive.service.DoctorService;
 
-public abstract class DoctorServiceImplArraylist implements DoctorService {
+public class DoctorServiceImplArraylist implements DoctorService {
 
-    private static List<Doctor> doctorList = new ArrayList<>();
-
-    @Override
-    public void emptyArrayList() {
-        doctorList.clear();
-    }
+    private static List<Doctor>doctorList = new ArrayList<>();
 
     @Override
     public List<Doctor> getAllDoctors() {
@@ -24,22 +23,19 @@ public abstract class DoctorServiceImplArraylist implements DoctorService {
     @Override
     public Integer addDoctor(Doctor doctor) {
         doctorList.add(doctor);
-        return 1;
+        return doctor.getDoctorId();
     }
 
     @Override
     public List<Doctor> getDoctorSortedByExperience() {
-        Collections.sort(doctorList);
-        return doctorList;
+        List<Doctor> sortedDoctors = doctorList;
+        sortedDoctors.sort(Comparator.comparing(Doctor::getYearsOfExperience));
+        return sortedDoctors;
+    }
+    @Override
+    public void emptyArrayList()
+    {
+        doctorList=new ArrayList<>();
     }
 
-    /*
-     * IMPORTANT:
-     * Do NOT implement the following methods here:
-     * - getDoctorById
-     * - deleteDoctor
-     * - updateDoctor
-     *
-     * These are for JPA (Day-7 onwards)
-     */
 }

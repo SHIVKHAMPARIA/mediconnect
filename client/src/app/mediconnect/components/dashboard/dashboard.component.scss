@@ -1,134 +1,201 @@
+.page-background {
+  min-height: calc(100vh - 61px);
+  background: #cdded8; 
+  padding: 40px 20px;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+
 .dashboard-container {
   max-width: 1200px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  background: #f5f7f5;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
 
-  h1 {
-    text-align: center;
-    font-size: 2.4rem;
-    color: #333;
-    margin-bottom: 20px;
-  }
+.dashboard-container h1 {
+  text-align: center;
+  font-size: 28px;
+  color: #5E9896;
+  margin-bottom: 30px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
 
-  .doctor-details,
-  .clinic-section,
-  .appointments-section,
-  .patient-details,
-  .doctor-section,
-  .patients-section {
-    margin-bottom: 30px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
+/* Inner Card Sections */
+.card-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px 30px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
 
-    h2 {
-      font-size: 1.8rem;
-      color: #555;
-      margin-bottom: 15px;
-    }
+.card-section h2 {
+  font-size: 20px;
+  color: #5E9896;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 700;
+  border-bottom: 2px solid #f0f7f7;
+  padding-bottom: 12px;
+}
 
-    p {
-      font-size: 1.2rem;
-      color: #666;
-      margin-bottom: 8px;
+.card-section p {
+  font-size: 15px;
+  color: #3b504e;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
 
-      strong {
-        color: #333;
-      }
-    }
+.card-section p strong {
+  color: #5E9896;
+  font-weight: 600;
+  margin-right: 5px;
+}
 
-  }
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+}
 
-  .clinics-table,
-  .appointments-table,
-  .patients-table,
-  .doctors-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
+.mc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #ffffff;
+}
 
-    th,
-    td {
-      padding: 12px 15px;
-      text-align: left;
-      border: 1px solid #ddd;
-    }
+.mc-table th {
+  padding: 14px 16px;
+  background: #5E9896;
+  color: white;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
 
-    th {
-      background-color: #4caf50;
-      color: white;
-      font-weight: bold;
-    }
+.mc-table th:first-child {
+  border-top-left-radius: 8px;
+}
 
-    td {
-      font-size: 1rem;
-      color: #333;
-    }
+.mc-table th:last-child {
+  border-top-right-radius: 8px;
+}
 
-    tr {
-      &:hover {
-        background-color: #f1f1f1;
-      }
+.mc-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #d8e0df;
+  color: #3b504e;
+  font-size: 14px;
+  vertical-align: middle;
+}
 
-      &.selected {
-        background-color: #e0f7fa;
-        font-weight: bold;
-        cursor: pointer;
-      }
-    }
-  }
+.mc-table tbody tr {
+  transition: background-color 0.2s ease;
+}
 
-  .empty-list {
-    padding: 15px;
-    background-color: #ffe6e6;
-    border: 1px solid #ffcccc;
-    border-radius: 8px;
-    text-align: center;
+.mc-table tbody tr:hover {
+  background-color: #f4f8f7;
+}
 
-    p {
-      font-size: 1.2rem;
-      color: #d9534f;
-      margin: 0;
-    }
-  }
+.mc-table tbody tr.selected {
+  background-color: rgba(94, 152, 150, 0.1);
+}
 
-  .btn-edit,
-  .btn-delete {
-    margin: 5px;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+.empty-list p {
+  color: #8c9e9c;
+  font-style: italic;
+  text-align: center;
+  padding: 20px 0;
+}
 
-  .btn-edit {
-    background-color: #007bff;
-    color: white;
-  }
+/* Badges for Status (Optional but looks great) */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #f0f7f7;
+  color: #5E9896;
+}
 
-  .btn-delete {
-    background-color: #dc3545;
-    color: white;
-  }
 
-  .btn-save {
-    background-color: #28a745;
-    color: white;
-  }
+.status-badge.accepted { 
+  background: #e8f5e9; color: #2e7d32; 
+}
+.status-badge.cancel,
+.status-badge.cancelled { 
+  background: #ffebee; color: #c62828; 
+}
+.status-badge.pending { 
+  background: #fff8e1; color: #f57c00; 
+}
 
-  .btn-cancel {
-    background-color: #6c757d;
-    color: white;
-  }
+/* Buttons */
+.action-buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+}
 
-  button.btn-delete:disabled {
-    background-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
-  }
+.btn-primary,
+.btn-danger,
+.btn-success,
+.btn-disabled {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: #5E9896;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #4a7d7b;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.btn-success {
+  background: #2ecc71;
+  color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #27ae60;
+}
+
+.btn-disabled,
+button:disabled {
+  background: #aebdbb !important;
+  color: #ffffff;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Action Cell in Table */
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
 }

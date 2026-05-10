@@ -12,24 +12,24 @@ import org.springframework.transaction.annotation.Transactional;
 import com.edutech.progressive.entity.Appointment;
 
 @Repository
-public interface AppointmentRepository extends JpaRepository<Appointment, Integer>{
+public interface AppointmentRepository  extends JpaRepository<Appointment,Integer>{
 
     List<Appointment> findByClinic_ClinicId(int clinicId);
     List<Appointment> findByPatient_PatientId(int patientId);
     List<Appointment> findByStatus(String status);
 
-    @Transactional
     @Modifying
+    @Transactional
     @Query("DELETE FROM Appointment a WHERE a.clinic.doctor.doctorId = :doctorId")
     void deleteByDoctorId(@Param("doctorId") int doctorId);
 
-    @Transactional
     @Modifying
+    @Transactional
     @Query("DELETE FROM Appointment a WHERE a.patient.patientId = :patientId")
     void deleteByPatientId(@Param("patientId") int patientId);
 
-    @Transactional
     @Modifying
+    @Transactional
     @Query("DELETE FROM Appointment a WHERE a.clinic.clinicId = :clinicId")
     void deleteByClinicId(@Param("clinicId") int clinicId);
 }
